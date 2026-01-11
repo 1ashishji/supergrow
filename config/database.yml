@@ -17,9 +17,14 @@ default: &default
   password: <%= ENV.fetch("DB_PASSWORD", "") %>
   host: <%= ENV.fetch("DB_HOST", "localhost") %>
 
+
 development:
   <<: *default
-  database: voice_generator_development
+  database: <%= ENV.fetch("MYSQLDATABASE", "voice_generator_production") %>
+  username: <%= ENV.fetch("MYSQLUSER", "voice_generator") %>
+  password: <%= ENV["MYSQLPASSWORD"] %>
+  host: <%= ENV["MYSQLHOST"] %>
+  port: <%= ENV.fetch("MYSQLPORT", "3306") %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -50,6 +55,8 @@ test:
 #
 production:
   <<: *default
-  database: voice_generator_production
-  username: voice_generator
-  password: <%= ENV["VOICE_GENERATOR_DATABASE_PASSWORD"] %>
+  database: <%= ENV.fetch("MYSQLDATABASE", "voice_generator_production") %>
+  username: <%= ENV.fetch("MYSQLUSER", "voice_generator") %>
+  password: <%= ENV["MYSQLPASSWORD"] %>
+  host: <%= ENV["MYSQLHOST"] %>
+  port: <%= ENV.fetch("MYSQLPORT", "3306") %>
