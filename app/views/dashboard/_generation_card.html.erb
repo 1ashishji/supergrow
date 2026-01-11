@@ -1,0 +1,36 @@
+<article class="generation-card history-card" data-id="<%= generation.id %>" data-status="<%= generation.status %>">
+  <div class="card-header">
+    <span class="status-badge status-<%= generation.status %>"><%= generation.status.capitalize %></span>
+    <span class="timestamp" title="<%= generation.created_at %>"><%= time_ago_in_words(generation.created_at) %> ago</span>
+  </div>
+  <div class="card-body">
+    <p class="text-preview"><%= generation.text.truncate(100) %></p>
+  </div>
+  <div class="card-footer">
+    <% if generation.status == 'completed' %>
+      <div class="audio-controls">
+        <audio controls preload="none" class="audio-player">
+          <source src="<%= generation.audio_url %>" type="audio/mpeg">
+          Your browser does not support the audio element.
+        </audio>
+      </div>
+    <% elsif generation.status == 'failed' %>
+      <div class="error-details" title="<%= generation.error_message %>">
+        <div class="error-header">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-red-500">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+          </svg>
+          <span class="error-label">Generation Failed</span>
+        </div>
+        <div class="error-text">
+          <%= generation.error_message || "Unknown error occurred" %>
+        </div>
+      </div>
+    <% else %>
+      <div class="processing-indicator">
+        <div class="spinner"></div>
+        <span>Generating...</span>
+      </div>
+    <% end %>
+  </div>
+</article>
