@@ -21,21 +21,24 @@ default: &default
 
 development:
   <<: *default
-  <% if ENV["MYSQL_URL"] %>
-  url: <%= ENV["MYSQL_URL"].gsub(/^mysql:\/\//, "mysql2://") %>
-  # Unset individual components if URL is used to prevent ambiguity
-  username: ~
-  password: ~
-  host: ~
-  port: ~
+  <% 
+    mysql_url = ENV["MYSQL_URL"] || ENV["DATABASE_URL"]
+    if mysql_url 
+  %>
+  url: <%= mysql_url.gsub(/^mysql:\/\//, "mysql2://") %>
   <% else %>
   database: <%= ENV.fetch("MYSQLDATABASE", "railway") %>
   username: <%= ENV.fetch("MYSQLUSER", "root") %>
   password: <%= ENV["MYSQLPASSWORD"] %>
   host: <%= 
-    host = ENV.fetch("MYSQLHOST", "localhost")
-    puts "DEBUG: Connecting to DB Host: #{host}" if host != "localhost"
-    host
+    h = ENV.fetch("MYSQLHOST", "localhost")
+    if h != "localhost"
+      puts "INFO: Connecting to database at #{h}"
+      if h.include?(".up.railway.app") && ENV["RAILWAY_ENVIRONMENT"]
+        puts "ERROR: You are using a PUBLIC hostname on Railway! Connection will time out."
+      end
+    end
+    h
   %>
   port: <%= ENV.fetch("MYSQLPORT", "3306") %>
   <% end %>
@@ -69,13 +72,11 @@ test:
 #
 production:
   <<: *default
-  <% if ENV["MYSQL_URL"] %>
-  url: <%= ENV["MYSQL_URL"].gsub(/^mysql:\/\//, "mysql2://") %>
-  # Unset individual components if URL is used to prevent ambiguity
-  username: ~
-  password: ~
-  host: ~
-  port: ~
+  <% 
+    mysql_url = ENV["MYSQL_URL"] || ENV["DATABASE_URL"]
+    if mysql_url 
+  %>
+  url: <%= mysql_url.gsub(/^mysql:\/\//, "mysql2://") %>
   <% else %>
   database: <%= ENV.fetch("MYSQLDATABASE", "voice_generator_production") %>
   username: <%= ENV.fetch("MYSQLUSER", "voice_generator") %>
