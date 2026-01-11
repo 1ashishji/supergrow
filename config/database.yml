@@ -23,11 +23,20 @@ development:
   <<: *default
   <% if ENV["MYSQL_URL"] %>
   url: <%= ENV["MYSQL_URL"].gsub(/^mysql:\/\//, "mysql2://") %>
+  # Unset individual components if URL is used to prevent ambiguity
+  username: ~
+  password: ~
+  host: ~
+  port: ~
   <% else %>
   database: <%= ENV.fetch("MYSQLDATABASE", "railway") %>
   username: <%= ENV.fetch("MYSQLUSER", "root") %>
   password: <%= ENV["MYSQLPASSWORD"] %>
-  host: <%= ENV.fetch("MYSQLHOST", "localhost") %>
+  host: <%= 
+    host = ENV.fetch("MYSQLHOST", "localhost")
+    puts "DEBUG: Connecting to DB Host: #{host}" if host != "localhost"
+    host
+  %>
   port: <%= ENV.fetch("MYSQLPORT", "3306") %>
   <% end %>
 
@@ -62,6 +71,11 @@ production:
   <<: *default
   <% if ENV["MYSQL_URL"] %>
   url: <%= ENV["MYSQL_URL"].gsub(/^mysql:\/\//, "mysql2://") %>
+  # Unset individual components if URL is used to prevent ambiguity
+  username: ~
+  password: ~
+  host: ~
+  port: ~
   <% else %>
   database: <%= ENV.fetch("MYSQLDATABASE", "voice_generator_production") %>
   username: <%= ENV.fetch("MYSQLUSER", "voice_generator") %>
