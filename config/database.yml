@@ -21,11 +21,15 @@ default: &default
 
 development:
   <<: *default
+  <% if ENV["MYSQL_URL"] %>
+  url: <%= ENV["MYSQL_URL"].gsub(/^mysql:\/\//, "mysql2://") %>
+  <% else %>
   database: <%= ENV.fetch("MYSQLDATABASE", "railway") %>
   username: <%= ENV.fetch("MYSQLUSER", "root") %>
   password: <%= ENV["MYSQLPASSWORD"] %>
   host: <%= ENV.fetch("MYSQLHOST", "localhost") %>
   port: <%= ENV.fetch("MYSQLPORT", "3306") %>
+  <% end %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -56,8 +60,12 @@ test:
 #
 production:
   <<: *default
+  <% if ENV["MYSQL_URL"] %>
+  url: <%= ENV["MYSQL_URL"].gsub(/^mysql:\/\//, "mysql2://") %>
+  <% else %>
   database: <%= ENV.fetch("MYSQLDATABASE", "voice_generator_production") %>
   username: <%= ENV.fetch("MYSQLUSER", "voice_generator") %>
   password: <%= ENV["MYSQLPASSWORD"] %>
   host: <%= ENV.fetch("MYSQLHOST", "localhost") %>
   port: <%= ENV.fetch("MYSQLPORT", "3306") %>
+  <% end %>
