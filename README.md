@@ -45,10 +45,10 @@ The `.env` file has been created with your credentials. Update `CLOUDINARY_CLOUD
 
 ```bash
 # .env
-ELEVENLABS_API_KEY=sk_aebafc102ed039cf1352b2f45c21ccdef3152a2f5ce6c662
+ELEVENLABS_API_KEY=
 CLOUDINARY_CLOUD_NAME=your_cloud_name  # Update this
 CLOUDINARY_API_KEY=791299454532757
-CLOUDINARY_API_SECRET=3lqYuoLeIBWcSYnKiFzsWLdAbjk
+CLOUDINARY_API_SECRET=
 REDIS_URL=redis://localhost:6379/0
 ```
 
